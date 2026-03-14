@@ -3,12 +3,14 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "db:sync": "npx supabase db diff -f init_schema",
-    "db:apply": "npx supabase db reset"
+    "supabase:sync": "npx supabase db diff -f init_schema",
+    "supabase:apply": "npx supabase db reset",
+    "supabase:types": "npx supabase gen types typescript --local > libs/shared/supabase-client/src/lib/database.types.ts"
   },
   "private": true,
   "dependencies": {
     "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
     "@supabase/supabase-js": "^2.99.1",
