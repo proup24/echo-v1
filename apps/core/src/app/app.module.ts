@@ -1,7 +1,7 @@
 import { Module, Global } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { getSupabaseClient } from '@echo/supabase-client'
-import { WorkersModule } from 'src/modules/workers/workers.module'
+import { WorkersModule } from '../modules/workers/workers.module'
 
 @Global()
 @Module({

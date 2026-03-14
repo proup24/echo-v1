@@ -4,18 +4,17 @@
     "baseUrl": ".",
     "outDir": "../../dist/out-tsc",
     "types": ["node"],
-    "rootDir": "../../", 
+    "rootDir": "../../",
     "tsBuildInfoFile": "../../dist/tsconfig.app.tsbuildinfo",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "target": "es2021"
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "eslint.config.js",
-    "eslint.config.cjs",
-    "eslint.config.mjs"
+  "include": ["src/**/*.ts"],
+  "exclude": ["eslint.config.js", "eslint.config.cjs", "eslint.config.mjs"],
+  "references": [
+    {
+      "path": "../../libs/shared/supabase-client/tsconfig.lib.json"
+    }
   ]
 }

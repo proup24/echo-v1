@@ -1,2 +1,2 @@
-export * from './lib/supabase-client.js';
-export * from './lib/database.types';
+export * from './lib/supabase-client.js'
+export * from './lib/database.types.js'
