@@ -5,7 +5,8 @@
   "scripts": {
     "supabase:sync": "npx supabase db diff -f init_schema",
     "supabase:apply": "npx supabase db reset",
-    "supabase:types": "npx supabase gen types typescript --local > libs/shared/supabase-client/src/lib/database.types.ts"
+    "supabase:types": "npx supabase gen types typescript --local > libs/shared/supabase-client/src/lib/database.types.ts",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -36,17 +37,25 @@
     "@swc/helpers": "~0.5.18",
     "@types/node": "20.19.9",
     "eslint": "^9.8.0",
-    "eslint-config-prettier": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "22.5.4",
     "prettier": "~3.6.2",
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "husky": "^8.0.0"
   },
   "workspaces": [
     "apps/*",
     "libs/shared/*"
+  ],
+  "lint-staged": {
+  "*.{js,ts,tsx,mts}": [
+    "eslint --fix",
+    "prettier --write"
   ]
+}
 }

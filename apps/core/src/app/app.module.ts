@@ -6,7 +6,11 @@ import { AppService } from './app.service'
 
 @Global()
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true })],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true
+    })
+  ],
   providers: [
     {
       provide: 'SUPABASE_CLIENT',

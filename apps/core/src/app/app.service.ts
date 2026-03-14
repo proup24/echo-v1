@@ -1,6 +1,6 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { SupabaseClient } from '@supabase/supabase-js';
-import { Database } from '@echo/supabase-client';
+import { Injectable, Inject } from '@nestjs/common'
+import { SupabaseClient } from '@supabase/supabase-js'
+import { Database } from '@echo/supabase-client'
 
 @Injectable()
 export class AppService {
@@ -9,8 +9,8 @@ export class AppService {
   ) {}
 
   async getAccounts() {
-    const { data, error } = await this.supabase.from('account').select('*');
-    if (error) throw error;
-    return data;
+    const { data, error } = await this.supabase.from('account').select('*')
+    if (error) throw error
+    return data
   }
 }
