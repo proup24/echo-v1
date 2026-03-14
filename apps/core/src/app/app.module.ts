@@ -1,8 +1,8 @@
-import { Module, Global } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { getSupabaseClient } from '@echo/supabase-client';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module, Global } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { getSupabaseClient } from '@echo/supabase-client'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
 
 @Global()
 @Module({
@@ -10,11 +10,11 @@ import { AppService } from './app.service';
   providers: [
     {
       provide: 'SUPABASE_CLIENT',
-      useFactory: () => getSupabaseClient(),
+      useFactory: () => getSupabaseClient()
     },
     AppService
   ],
   controllers: [AppController],
-  exports: ['SUPABASE_CLIENT'],
+  exports: ['SUPABASE_CLIENT']
 })
 export class AppModule {}
