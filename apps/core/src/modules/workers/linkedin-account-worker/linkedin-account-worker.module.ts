@@ -4,4 +4,4 @@ import { Module } from '@nestjs/common'
   imports: [],
   exports: []
 })
-export class LinkedinAgentModule {}
+export class LinkedInAccountWorkerModule {}

@@ -3,7 +3,8 @@ import { ConfigService } from '@nestjs/config'
 import { BullModule } from '@nestjs/bullmq'
 import { DiscoveryEngineModule } from './discovery-engine/discovery-engine.module'
 import { SegMatcherModule } from './seg-matcher/seg-matcher.module'
-import { LinkedinAgentModule } from './linkedin-agent/linkedin-agent.module'
+import { LinkedInAccountWorkerModule } from './linkedin-account-worker/linkedin-account-worker.module'
+import { AccountWorkerModule } from './account-worker/account-worker.module'
 
 @Module({
   imports: [
@@ -11,8 +12,8 @@ import { LinkedinAgentModule } from './linkedin-agent/linkedin-agent.module'
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         connection: {
-          host: configService.get<string>('REDIS_HOST', 'localhost'),
-          port: configService.get<number>('REDIS_PORT', 6379),
+          host: configService.get<string>('REDIS_HOST'),
+          port: configService.get<number>('REDIS_PORT'),
           maxRetriesPerRequest: null,
           enableReadyCheck: true
         },
@@ -26,11 +27,17 @@ import { LinkedinAgentModule } from './linkedin-agent/linkedin-agent.module'
         }
       })
     }),
+    AccountWorkerModule,
     DiscoveryEngineModule,
     SegMatcherModule,
-    LinkedinAgentModule
+    LinkedInAccountWorkerModule
   ],
-  exports: [DiscoveryEngineModule, SegMatcherModule, LinkedinAgentModule]
+  exports: [
+    AccountWorkerModule,
+    DiscoveryEngineModule,
+    SegMatcherModule,
+    LinkedInAccountWorkerModule
+  ]
 })
 export class WorkersModule implements OnModuleInit {
   private readonly logger = new Logger(WorkersModule.name)

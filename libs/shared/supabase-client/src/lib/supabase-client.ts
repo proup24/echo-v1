@@ -1,7 +1,9 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { Database } from './database.types.js'
 
-export const getSupabaseClient = () => {
+export type TypedSupabaseClient = SupabaseClient<Database>
+
+export const getSupabaseClient = (): TypedSupabaseClient => {
   const supabaseUrl = process.env['SUPABASE_URL']
   const supabaseKey = process.env['SUPABASE_SERVICE_ROLE_KEY']
 
