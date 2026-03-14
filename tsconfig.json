@@ -8,6 +8,9 @@
     },
     {
       "path": "./apps/core"
+    },
+    {
+      "path": "./libs/shared/supabase-client"
     }
   ]
 }
