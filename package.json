@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "core:start": "npx nx serve core",
+    "redis:init": "docker run -d --name echo-redis -p 6379:6379 redis:alpine",
+    "supabase:start": "npx supabase start",
     "supabase:sync": "npx supabase db diff -f init_schema",
     "supabase:apply": "npx supabase db reset",
     "supabase:types": "npx supabase gen types typescript --local > libs/shared/supabase-client/src/lib/database.types.ts",
