@@ -1,1 +1,1 @@
-export const GENERATE_ACCOUNT_PRESET = 'generate-account-preset'
+export const PROCESS_ACCOUNT_WEBSITE = 'process-account-website'

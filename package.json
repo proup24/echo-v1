@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@mendable/firecrawl-js": "^4.16.0",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^11.0.0",
     "@nestjs/config": "^4.0.3",

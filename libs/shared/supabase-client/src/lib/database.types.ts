@@ -58,6 +58,41 @@ export type Database = {
         }
         Relationships: []
       }
+      account_website: {
+        Row: {
+          account_id: number
+          created_at: string
+          id: number
+          markdown_url: string
+          summary: string | null
+          website: string
+        }
+        Insert: {
+          account_id: number
+          created_at?: string
+          id?: number
+          markdown_url: string
+          summary?: string | null
+          website: string
+        }
+        Update: {
+          account_id?: number
+          created_at?: string
+          id?: number
+          markdown_url?: string
+          summary?: string | null
+          website?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'account_website_id_fkey'
+            columns: ['id']
+            isOneToOne: true
+            referencedRelation: 'account'
+            referencedColumns: ['id']
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
