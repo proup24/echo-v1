@@ -30,6 +30,23 @@ workers/
     processors.ts              # Queue name constants
 ```
 
+## LLM Prompt Templates
+
+Prompt files live in `modules/llm/prompts/*.hbs` and use Handlebars syntax:
+
+```
+---system---
+System prompt content here. Supports {{variable}} and {{#each list}}...{{/each}}.
+---user---
+User prompt content here with {{variables}}.
+```
+
+- One file per prompt, named descriptively: `classify-industry-urls.hbs`
+- Both `---system---` and `---user---` sections are required
+- Templates are compiled and cached by `PromptService` at first use
+- Webpack copies `.hbs` files to `dist/prompts/` via the assets config in `webpack.config.js`
+- Categories, lists, and other dynamic data should be passed as template variables, not hardcoded in the template
+
 ## Standalone Service Modules
 
 Reusable services (e.g., crawler, llm) live as standalone modules under `modules/`:

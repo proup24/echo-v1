@@ -1,10 +1,18 @@
-Review the current codebase and recent changes, then update the project knowledge files.
+Review the current codebase and recent changes, then update all project knowledge files.
+
+## Knowledge Files
+
+- `.claude/knowledge/conventions.md` — coding patterns, naming conventions, module structures
+- `.claude/knowledge/domain-glossary.md` — domain concepts, terminology, entity relationships
+- `.claude/knowledge/core.md` — core API modules, services, workers, shared libs, DB tables
 
 ## Steps
 
-1. Read the current `.claude/knowledge/conventions.md` and `.claude/knowledge/domain-glossary.md`
-2. Review recent git changes (`git diff HEAD~5..HEAD` or staged changes) and scan the codebase for patterns
-3. Identify gaps — new patterns, naming conventions, module structures, or domain terms not yet documented
-4. Update `conventions.md` with any new coding patterns, file structures, or workflow conventions
-5. Update `domain-glossary.md` with any new domain concepts, entity relationships, or terminology
-6. Report a summary of what was added or changed in each file
+1. Read all three knowledge files listed above
+2. Review recent git changes (`git diff HEAD~5..HEAD` or staged changes) and scan the codebase for new or modified modules
+3. For each knowledge file, identify gaps:
+   - **conventions.md** — new coding patterns, file structures, workflow conventions
+   - **domain-glossary.md** — new domain concepts, entity relationships, terminology
+   - **core.md** — new/removed/renamed modules, services, workers, queues, DB tables, shared libs; verify the module dependency tree is accurate
+4. Update each file with the identified changes. Remove entries that are no longer accurate.
+5. Report a summary of what was added, changed, or removed in each file
