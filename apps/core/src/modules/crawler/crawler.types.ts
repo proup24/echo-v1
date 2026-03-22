@@ -10,3 +10,19 @@ export interface CrawlResult {
   sourceUrls: string[]
   mergedMarkdown: string
 }
+
+export type PageCategory =
+  | 'homepage'
+  | 'services'
+  | 'products'
+  | 'pricing'
+  | 'about'
+  | 'case_studies'
+  | 'industries'
+  | 'solutions'
+  | 'other'
+
+export interface ClassifiedUrl {
+  url: string
+  category: PageCategory
+}

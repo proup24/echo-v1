@@ -30,6 +30,21 @@ workers/
     processors.ts              # Queue name constants
 ```
 
+## Standalone Service Modules
+
+Reusable services (e.g., crawler, llm) live as standalone modules under `modules/`:
+- Module exports its service via `exports: [ServiceName]`
+- Consumers import the module to get access to the service
+- Services return **pure data** — no DB writes or storage uploads
+- **Processors** (workers) are responsible for persistence: storage uploads, DB upserts, status updates
+
+## Supabase Storage
+
+- Upload files via `supabase.storage.from(bucket).upload(path, content, { upsert: true })`
+- Store the storage path (not full URL) in a DB column (e.g., `markdown_url`)
+- Download via `supabase.storage.from(bucket).download(path)`
+- Bucket names use kebab-case (e.g., `account-websites`)
+
 ## Adding a New Worker
 
 1. Create the worker directory under `modules/workers/`

@@ -1,34 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { FirecrawlService } from './firecrawl.service'
+import { UrlIndustryClassifierService } from './url-industry-classifier.service'
 import type { CrawlResult } from './crawler.types'
-
-const SKIP_PATTERNS = [
-  /\/blog/,
-  /\/news/,
-  /\/press/,
-  /\/careers/,
-  /\/jobs/,
-  /\/team/,
-  /\/people/,
-  /\/legal/,
-  /\/privacy/,
-  /\/terms/,
-  /\/cookie/,
-  /\/support/,
-  /\/help/,
-  /\/docs/,
-  /\/faq/,
-  /\/login/,
-  /\/signup/,
-  /\/register/,
-  /\/auth/
-]
 
 @Injectable()
 export class CrawlerService {
   private readonly logger = new Logger(CrawlerService.name)
 
-  constructor(private firecrawlService: FirecrawlService) {}
+  constructor(
+    private firecrawlService: FirecrawlService,
+    private urlIndustryClassifierService: UrlIndustryClassifierService
+  ) {}
 
   async crawlAccountWebsite(websiteUrl: string): Promise<CrawlResult> {
     this.logger.log(`Starting crawl for: ${websiteUrl}`)
@@ -38,8 +20,11 @@ export class CrawlerService {
     // 1. Discover URLs
     const discoveredUrls = await this.firecrawlService.mapSite(normalizedUrl)
 
-    // 2. Filter and limit
-    const selectedUrls = this.filterAndLimitUrls(discoveredUrls, normalizedUrl)
+    // 2. Classify and select relevant URLs
+    const selectedUrls = await this.selectRelevantUrls(
+      discoveredUrls,
+      normalizedUrl
+    )
     this.logger.log(
       `Selected ${selectedUrls.length} of ${discoveredUrls.length} discovered URLs`
     )
@@ -72,30 +57,65 @@ export class CrawlerService {
     return url.replace(/\/+$/, '')
   }
 
-  private filterAndLimitUrls(urls: string[], baseUrl: string): string[] {
-    // Always include the homepage
-    const homepage = baseUrl.replace(/\/+$/, '')
-    const filtered = urls.filter(
-      (url) => !SKIP_PATTERNS.some((pattern) => pattern.test(url))
+  private async selectRelevantUrls(
+    urls: string[],
+    baseUrl: string
+  ): Promise<string[]> {
+    const classified = await this.urlIndustryClassifierService.classifyUrls(
+      urls,
+      baseUrl
     )
 
-    // Ensure homepage is first
-    const withHomepage = [
-      homepage,
-      ...filtered.filter((u) => u.replace(/\/+$/, '') !== homepage)
-    ]
+    // Keep only URLs in relevant categories, sorted by path depth (shallowest first)
+    const kept = classified
+      .filter((c) =>
+        this.urlIndustryClassifierService.isKeepCategory(c.category)
+      )
+      .sort((a, b) => this.getPathDepth(a.url) - this.getPathDepth(b.url))
 
-    // Dynamic page limits
-    const totalDiscovered = urls.length
-    let maxPages: number
-    if (totalDiscovered < 20) {
-      maxPages = 15
-    } else if (totalDiscovered <= 100) {
-      maxPages = 15
-    } else {
-      maxPages = 12
+    const homepage = baseUrl.replace(/\/+$/, '')
+    const selected = new Set<string>()
+
+    // 1. Homepage always first
+    selected.add(homepage)
+
+    // 2. One page per category — pick the shallowest URL for each
+    for (const entry of kept) {
+      const normalized = entry.url.replace(/\/+$/, '')
+      if (normalized === homepage) continue
+
+      const categoryAlreadyPicked = [...selected].some((url) =>
+        kept.find(
+          (c) =>
+            c.url === url && c.category === entry.category && url !== homepage
+        )
+      )
+
+      if (!categoryAlreadyPicked) {
+        selected.add(entry.url)
+      }
     }
 
-    return withHomepage.slice(0, maxPages)
+    // 3. Fill up to 10 additional pages, shallowest first
+    const additionalBudget = 10
+    let added = 0
+    for (const entry of kept) {
+      if (added >= additionalBudget) break
+      if (!selected.has(entry.url)) {
+        selected.add(entry.url)
+        added++
+      }
+    }
+
+    // Return with homepage first, rest in selection order
+    return [homepage, ...[...selected].filter((u) => u !== homepage)]
+  }
+
+  private getPathDepth(url: string): number {
+    try {
+      return new URL(url).pathname.split('/').filter(Boolean).length
+    } catch {
+      return url.split('/').filter(Boolean).length
+    }
   }
 }
